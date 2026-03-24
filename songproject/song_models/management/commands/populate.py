@@ -1,71 +1,38 @@
-import os 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'persona.seKngs')
+from django.core.management.base import BaseCommand
+from song_models.models import Song, SongUser
+from django.contrib.auth.models import User
+from django.utils import timezone
 
-import django 
-django.setup()
+class Command(BaseCommand):
+    help = "Populate the database with sample data"
 
-from song_models.models import Song, SongUser, User
-from dateFme import dateFme
+    def handle(self, *args, **kwargs):
+        self.stdout.write("Limpiando BD...")
 
-def clean_db():
-    Song.objects.all().delete()
-    SongUser.objects.all().delete()
-    User.objects.all().delete()
- 
-def populate():
-    # --- Languages ---
-    language = [
-        ('EN', 'English'),
-        ('ES', 'Spanish'),
-        ('FR', 'French'),
-        ('DE', 'German'),
-        ('IT', 'Italian'),
-        ('PT', 'Portuguese'),
-        ('JA', 'Japanese'),
-        ('ZH', 'Chinese'),
-    ]
-    
-    # --- Categories ---
-    category = [
-        ('POP', 'Pop'),
-        ('ROCK', 'Rock'),
-        ('JAZZ', 'Jazz'),
-        ('HIPHOP', 'Hip-Hop'),
-        ('CLASSICAL', 'Classical'),
-        ('REGGAE', 'Reggae'),
-        ('LATIN', 'Latin'),
-        ('KPOP', 'K-Pop'),
-        ('COUNTRY', 'Country'),
-        ('BLUES', 'Blues'),
-        ('FOLK', 'Folk'),
-        ('ELECTRONIC', 'Electronic'),
-        ('R&B', 'R&B'),
-        ('SOUL', 'Soul'),
-        ('METAL', 'Metal'),
-        ('PUNK', 'Punk'),
-        ('ALTERNATIVE', 'Alternative'),
-        ('INDIE', 'Indie'),
-        ('GOSPEL', 'Gospel'),
-        ('WORLD', 'World Music'),
-    ]    
+        # Limpiar datos
+        SongUser.objects.all().delete()
+        Song.objects.all().delete()
+        User.objects.all().delete()
 
-    # --- Songs --- 
-    s1 = Song.objects.all().create(id=1001, title='Paraiso', artist='Dvicio', language=language[1][0], audio_file='paraiso.mp3', lrc_file='paraiso.lrc', background_image='paraiso.png', category=category[0][0])
-    s2 = Song.objects.all().create(id=1002, title='Lose Yourself', artist='Eminem', language=language[0][0], audio_file='loseYourself.mp3', lrc_file='loseYourself.lrc', background_image='loseYourself.png', category=category[3][0])
-    s3 = Song.objects.all().create(id=1003, title='AFRIKANBADMAN', artist='Gazo', language=language[2][0], audio_file='afrikanBadMan.mp3', lrc_file='afrikanBadMan.lrc', background_image='afrikanBadMan.png', category=category[3][0])
+        self.stdout.write("Poblando datos...")
 
-    # --- Users --- 
-    u1 = User.objects.create_user(username='alumno1', password='alumno1')
-    u2 = User.objects.create_user(username='alumno2', password='alumno2')
+        # --- Songs ---
+        s1 = Song.objects.create(title='Paraiso', artist='Dvicio', language='ES', audio_file='paraiso.mp3', lrc_file='paraiso.lrc', background_image='paraiso.png', category='POP')
 
-    # --- Song Users --- 
-    su1 = SongUser.objects.all().create(id=1001, song=s1, user=u1, correct_guesses=10, wrong_guesses=1)
-    su2 = SongUser.objects.all().create(id=1002, song=s2, user=u2, correct_guesses=8, wrong_guesses=1)
-    su3 = SongUser.objects.all().create(id=1003, song=s3, user=u2, correct_guesses=10, wrong_guesses=0)
+        s2 = Song.objects.create(title='Lose Yourself', artist='Eminem', language='EN', audio_file='loseYourself.mp3', lrc_file='loseYourself.lrc', background_image='loseYourself.png', category='HIPHOP')
 
-if __name__ == '__main__':
-    print("Limpiando BD...")
-    clean_db()
-    print("Poblando datos...")
-    populate()
-    print("Done.")
+        s3 = Song.objects.create(title='AFRIKANBADMAN', artist='Gazo', language='FR', audio_file='afrikanBadMan.mp3', lrc_file='afrikanBadMan.lrc', background_image='afrikanBadMan.png', category='HIPHOP')
+
+        # --- Users ---
+        u1 = User.objects.create_user(username='alumno1', password='alumno1')
+        u2 = User.objects.create_user(username='alumno2', password='alumno2')
+
+        # superuser obligatorio según enunciado
+        User.objects.create_superuser(username='alumnodb', password='alumnodb')
+
+        # --- SongUser ---
+        SongUser.objects.create(song=s1, user=u1, correct_guesses=10, wrong_guesses=1)
+        SongUser.objects.create(song=s2, user=u2, correct_guesses=8, wrong_guesses=1)
+        SongUser.objects.create(song=s3, user=u2, correct_guesses=10, wrong_guesses=0)
+
+        self.stdout.write(self.style.SUCCESS("Base de datos poblada correctamente"))

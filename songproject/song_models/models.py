@@ -65,7 +65,7 @@ class SongUser(models.Model):
     
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     
-    played_at = models.DateTimeField(auto_now_add=True)
+    played_at = models.DateTimeField(default=timezone.now)
     
     correct_guesses = models.IntegerField(default=0)
     
