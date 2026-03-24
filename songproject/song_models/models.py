@@ -58,7 +58,7 @@ class Song(models.Model):
     number_times_played = models.IntegerField(default=0)
 
     def __str__(self):
-        return f"{self.title} - {self.artist}"
+        return f"{self.artist} - {self.title}"
 
 class SongUser(models.Model):
     song = models.ForeignKey(Song, on_delete=models.CASCADE)
@@ -72,6 +72,6 @@ class SongUser(models.Model):
     wrong_guesses = models.IntegerField(default=0)
 
     def __str__(self):
-        return f"{self.song} - {self.user}"
+        return f"{self.user} - {self.song.title}"
 
     
