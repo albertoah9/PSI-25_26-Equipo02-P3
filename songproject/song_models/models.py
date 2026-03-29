@@ -3,7 +3,6 @@ from  django.contrib.auth.models import User
 
 from django.utils import timezone
 
-
 class Song(models.Model):
     LANGUAGE_CHOICES = [
         ('EN', 'English'),
