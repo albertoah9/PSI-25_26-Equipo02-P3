@@ -3,5 +3,5 @@ from .models import Song, SongUser
 
 # Register your models here.
 admin.site.register(Song)
-admin.site.registrer(SongUser)
+admin.site.register(SongUser)
 
