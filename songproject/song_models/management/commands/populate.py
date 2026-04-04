@@ -25,7 +25,6 @@ class Command(BaseCommand):
         u1 = User.objects.create_user(username='alumno1', password='alumno1')
         u2 = User.objects.create_user(username='alumno2', password='alumno2')
 
-        # superuser obligatorio según enunciado
         User.objects.create_superuser(username='alumnodb', password='alumnodb')
 
         # --- SongUser ---
