@@ -11,8 +11,7 @@ from rest_framework.response import Response
 class SongViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Song.objects.all().order_by('id')
     serializer_class = SongSerializer
-    #permission_classes = [AllowAny]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     pagination_class = SongPagination
     
     @action(detail=False, methods=['get'])
