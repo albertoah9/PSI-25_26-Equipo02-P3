@@ -20,7 +20,8 @@ class Command(BaseCommand):
         s1 = Song.objects.create(title='Paraiso', artist='Dvicio', language='ES', audio_file='paraiso.mp3', lrc_file='paraiso.lrc', background_image='paraiso.png', category='POP')
         s2 = Song.objects.create(title='Lose Yourself', artist='Eminem', language='EN', audio_file='loseYourself.mp3', lrc_file='loseYourself.lrc', background_image='loseYourself.png', category='HIPHOP')
         s3 = Song.objects.create(title='AFRIKANBADMAN', artist='Gazo', language='FR', audio_file='afrikanBadMan.mp3', lrc_file='afrikanBadMan.lrc', background_image='afrikanBadMan.png', category='HIPHOP')
-
+        s4= Song.objects.create(title='Here in the real world', artist='Alan Jackson', language='EN', audio_file='here_in_the_real_world.mp3', lrc_file='here_in_the_real_world.lrc', background_image='here_in_the_real_world.png', category='COUNTRY')
+        
         # --- Users ---
         u1 = User.objects.create_user(username='alumno1', password='alumno1')
         u2 = User.objects.create_user(username='alumno2', password='alumno2')
