@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from song_models.models import Song, SongUser
 from .serializers import SongSerializer, SongUserSerializer
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from .pagination import SongPagination
 from random import choice
 from rest_framework.decorators import action
@@ -11,7 +11,8 @@ from rest_framework.response import Response
 class SongViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Song.objects.all().order_by('id')
     serializer_class = SongSerializer
-    permission_classes = [AllowAny]
+    #permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     pagination_class = SongPagination
     
     @action(detail=False, methods=['get'])
@@ -67,6 +68,7 @@ class SongViewSet(viewsets.ReadOnlyModelViewSet):
 class SongUserViewSet(viewsets.ModelViewSet):
     queryset = SongUser.objects.all()
     serializer_class = SongUserSerializer
+    permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
         return SongUser.objects.filter(user=self.request.user).order_by('id')

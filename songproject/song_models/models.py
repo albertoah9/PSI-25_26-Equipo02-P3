@@ -72,5 +72,4 @@ class SongUser(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.song.title}"
-
     
