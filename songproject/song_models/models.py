@@ -1,6 +1,6 @@
 from django.db import models
 from  django.contrib.auth.models import User
-
+from django.core.validators import MinValueValidator
 from django.utils import timezone
 
 class Song(models.Model):
@@ -66,9 +66,9 @@ class SongUser(models.Model):
     
     played_at = models.DateTimeField(default=timezone.now)
     
-    correct_guesses = models.IntegerField(default=0)
+    correct_guesses = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     
-    wrong_guesses = models.IntegerField(default=0)
+    wrong_guesses = models.IntegerField(default=0, validators=[MinValueValidator(0)])
 
     def __str__(self):
         return f"{self.user} - {self.song.title}"
