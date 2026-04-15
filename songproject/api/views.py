@@ -67,7 +67,6 @@ class SongViewSet(viewsets.ReadOnlyModelViewSet):
 class SongUserViewSet(viewsets.ModelViewSet):
     queryset = SongUser.objects.all()
     serializer_class = SongUserSerializer
-    permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
         return SongUser.objects.filter(user=self.request.user).order_by('id')
