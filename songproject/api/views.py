@@ -67,9 +67,9 @@ class SongViewSet(viewsets.ReadOnlyModelViewSet):
 class SongUserViewSet(viewsets.ModelViewSet):
     queryset = SongUser.objects.all()
     serializer_class = SongUserSerializer
-    
+
     def get_queryset(self):
         return SongUser.objects.filter(user=self.request.user).order_by('id')
-    
+
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
