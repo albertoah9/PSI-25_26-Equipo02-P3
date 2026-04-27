@@ -23,7 +23,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { getTopSongs, getRandomSong } from '../api'
+import { getTopSongs, getRandomSong } from '../services/api'
 import SongList from '../components/SongList.vue'
 import SongSearch from '../components/SongSearch.vue'
 
@@ -35,7 +35,7 @@ const error = ref('')
 onMounted(async () => {
   try {
     topSongs.value = await getTopSongs()
-  } catch (e) {
+  } catch {
     error.value = 'Could not load top songs'
   }
 })
@@ -44,7 +44,7 @@ async function goToRandomSong() {
   try {
     const song = await getRandomSong()
     router.push(`/songs/${song.id}`)
-  } catch (e) {
+  } catch {
     error.value = 'Could not load random song'
   }
 }

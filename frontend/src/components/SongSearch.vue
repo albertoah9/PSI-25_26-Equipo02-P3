@@ -19,7 +19,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { searchSongs } from '../api'
+import { searchSongs } from '../services/api'
 import SongList from './SongList.vue'
 
 const title = ref('')
@@ -37,7 +37,7 @@ async function handleSearch() {
 
   try {
     songs.value = await searchSongs(title.value)
-  } catch (e) {
+  } catch {
     error.value = 'No songs found'
   }
 }

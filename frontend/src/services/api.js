@@ -1,7 +1,31 @@
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api/v1'
+
+export async function loginUser(username, password) {
+  const response = await fetch(`${API_BASE_URL}/token/login/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      username,
+      password,
+    }),
+  })
+
+  const data = await response.json()
+
+  if (!response.ok) {
+    throw new Error(data.detail || 'Login failed')
+  }
+
+  console.log(data)
+
+  return data
+}
+
 
 export async function apiFetch(path, options = {}) {
-  const token = sessionStorage.getItem('token')
+  const token = sessionStorage.getItem('auth_token')
 
   const headers = {
     ...options.headers,
@@ -15,7 +39,7 @@ export async function apiFetch(path, options = {}) {
     headers.Authorization = `Token ${token}`
   }
 
-  const response = await fetch(`${API_BASE}${path}`, {
+  const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
     headers,
   })

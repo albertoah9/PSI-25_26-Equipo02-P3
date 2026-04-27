@@ -1,7 +1,7 @@
 <template>
   <main>
-    <h1>Logout</h1>
-    <p>You have logged out successfully.</p>
+    <h1>Log Out</h1>
+    <p>You have logged out succesfully</p>
     <p>Redirecting to Home in 5 seconds...</p>
   </main>
 </template>
@@ -9,30 +9,16 @@
 <script setup>
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '../stores/auth'
 
 const router = useRouter()
+const authStore = useAuthStore()
 
-onMounted(async () => {
-  const token = sessionStorage.getItem('token')
-
-  try {
-    if (token) {
-      await fetch('http://127.0.0.1:8000/api/v1/token/logout/', {
-        method: 'POST',
-        headers: {
-          Authorization: `Token ${token}`
-        }
-      })
-    }
-  } catch (e) {
-    console.error(e)
-  }
-
-  sessionStorage.removeItem('token')
+onMounted(() => {
+  authStore.clearToken()
 
   setTimeout(() => {
     router.push('/')
   }, 5000)
 })
 </script>
-
