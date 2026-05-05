@@ -1,135 +1,75 @@
 <template>
   <main>
-    <h1>SongProject</h1>
-
     <section>
+      <h1>Learn a language through songs</h1>
+
       <p>
-        Practice your listening skills by completing missing words
-        while listening to songs.
+        "Songs" is the new way to learn English and other languages through music
+        and the lyrics of your favourite songs. Improve and practise your listening
+        skills with the best music videos. Fill in the gaps to the lyrics as you
+        listen and sing Karaoke to your favourites.
       </p>
-    </section>
 
-    <section>
-      <button type="button" @click="handleRandomSong">
+      <button
+        :disabled="loadingRandom"
+        @click="goRandom"
+      >
         Random song
       </button>
-
-      <p v-if="randomError">{{ randomError }}</p>
     </section>
 
     <section>
-      <h2>Most popular songs</h2>
+      <h2>Top Songs</h2>
 
-      <p v-if="loadingTopSongs">Loading songs...</p>
-      <p v-else-if="topSongsError">{{ topSongsError }}</p>
+      <div v-if="topSongs.length > 0" class="song-cards">
+        <SongList :songs="topSongs" />
+      </div>
 
-      <ul v-else>
-        <li
-          v-for="song in topSongs"
-          :key="song.id"
-        >
-          <RouterLink :to="`/songs/${song.id}`">
-            {{ song.title }} - {{ song.artist }}
-          </RouterLink>
-        </li>
-      </ul>
-    </section>
-
-    <section>
-      <h2>Search songs</h2>
-
-      <form @submit.prevent="handleSearch">
-        <input
-          v-model="searchTitle"
-          type="text"
-          placeholder="Search by title"
-        />
-
-        <button type="submit">
-          Search
-        </button>
-      </form>
-
-      <p v-if="searchError">{{ searchError }}</p>
-
-      <ul v-if="searchResults.length > 0">
-        <li
-          v-for="song in searchResults"
-          :key="song.id"
-        >
-          <RouterLink :to="`/songs/${song.id}`">
-            {{ song.title }} - {{ song.artist }}
-          </RouterLink>
-        </li>
-      </ul>
-
-      <p v-else-if="searchDone">
-        No songs found.
+      <p v-else>
+        Loading...
       </p>
+    </section>
+
+    <section>
+      <SongSearch />
     </section>
   </main>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
-import { getTopSongs, searchSongs, getRandomSong } from '../services/api'
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { getTopSongs, getRandomSong } from '../services/api'
+import SongList from '../components/SongList.vue'
+import SongSearch from '../components/SongSearch.vue'
 
 const router = useRouter()
-
 const topSongs = ref([])
-const loadingTopSongs = ref(false)
-const topSongsError = ref('')
+const loadingRandom = ref(false)
 
-const searchTitle = ref('')
-const searchResults = ref([])
-const searchError = ref('')
-const searchDone = ref(false)
-
-const randomError = ref('')
-
-onMounted(async () => {
-  loadingTopSongs.value = true
-  topSongsError.value = ''
-
+async function loadTop() {
   try {
     topSongs.value = await getTopSongs()
-  } catch {
-    topSongsError.value = 'Could not load top songs'
-  } finally {
-    loadingTopSongs.value = false
-  }
-})
-
-async function handleSearch() {
-  searchError.value = ''
-  searchResults.value = []
-  searchDone.value = false
-
-  const title = searchTitle.value.trim()
-
-  if (!title) {
-    searchError.value = 'Please enter a title'
-    return
-  }
-
-  try {
-    searchResults.value = await searchSongs(title)
-  } catch {
-    searchError.value = 'Could not search songs'
-  } finally {
-    searchDone.value = true
+  } catch (err) {
+    console.error('Error loading top songs:', err)
   }
 }
 
-async function handleRandomSong() {
-  randomError.value = ''
+async function goRandom() {
+  loadingRandom.value = true
 
   try {
     const song = await getRandomSong()
-    router.push(`/songs/${song.id}`)
-  } catch {
-    randomError.value = 'Could not load random song'
+
+    if (song && song.id) {
+      router.push(`/songs/${song.id}`)
+    }
+  } catch (err) {
+    console.error('Random error:', err)
+  } finally {
+    loadingRandom.value = false
   }
 }
+
+onMounted(loadTop)
 </script>

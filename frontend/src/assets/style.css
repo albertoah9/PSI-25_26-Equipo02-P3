@@ -1,0 +1,160 @@
+/* Reset y base */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: #fff;
+  color: #222;
+  min-height: 100vh;
+}
+
+a { color: #1a73e8; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+button {
+  cursor: pointer;
+  border: none;
+  background: #1a73e8;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+button:disabled { opacity: 0.6; cursor: not-allowed; }
+button.btn-secondary { background: #fff; color: #1a73e8; border: 1px solid #1a73e8; }
+
+input[type="text"], input[type="password"], input[type="search"] {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  width: 100%;
+}
+
+/* Layout */
+.app-shell { display: flex; flex-direction: column; min-height: 100vh; }
+
+.app-shell main {
+  flex: 1;
+  padding: 56px 24px 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+}
+
+.app-shell main p {
+  max-width: 600px;
+  margin: 0 auto 16px;
+  line-height: 1.5;
+}
+
+.app-header {
+  background: #2c2c2c;
+  color: white;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.app-header .brand { font-size: 1.4rem; font-weight: 600; }
+.app-header nav a { color: #ccc; margin-right: 16px; }
+.app-header nav a.router-link-active { color: white; font-weight: 600; }
+
+/* Footer */
+.app-footer {
+  background: #f5f5f5;
+  text-align: center;
+  padding: 12px;
+  color: #666;
+  font-size: 0.85rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+/* Tarjetas de cancion */
+.song-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+.song-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+  text-align: center;
+}
+.song-card img { width: 100%; height: 140px; object-fit: cover; display: block; }
+.song-card .song-card-body { padding: 8px; }
+.song-card .song-title { font-weight: 600; font-size: 0.95rem; }
+.song-card .song-artist { color: #666; font-size: 0.85rem; }
+
+/* Login form */
+.login-card {
+  max-width: 360px;
+  margin: 60px auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 24px;
+  background: #fff;
+}
+.login-card h2 { text-align: center; margin-top: 0; }
+.login-card .field { margin-bottom: 12px; }
+.login-card button { width: 100%; padding: 10px; }
+.login-card .error { color: #c0392b; font-size: 0.85rem; }
+
+/* PlayView */
+.play-view { max-width: 800px; margin: 0 auto; }
+.play-view .song-bg {
+  background-size: cover;
+  background-position: center;
+  border-radius: 6px;
+  padding: 24px;
+  color: white;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  position: relative;
+}
+.play-view .song-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  border-radius: 6px;
+}
+.play-view .song-bg > * { position: relative; z-index: 1; }
+.play-view .song-bg h2 { margin-top: 0; }
+
+.lyrics-display { margin-top: 16px; min-height: 160px; text-align: center; }
+.lyrics-line { padding: 6px 0; color: #ddd; font-size: 1rem; }
+.lyrics-line.current { color: #fff; font-size: 1.15rem; font-weight: 600; }
+.lyrics-line input {
+  display: inline-block;
+  width: auto;
+  min-width: 80px;
+  padding: 2px 6px;
+  font-size: 1rem;
+  margin: 0 4px;
+}
+.lyrics-line input.wrong { border-color: #c0392b; background: #fde0dc; }
+.lyrics-line input.correct { border-color: #27ae60; background: #d4edda; }
+.lyrics-line .skip-btn { margin-left: 6px; padding: 2px 8px; font-size: 0.8rem; }
+
+/* Summary */
+.summary-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 16px;
+  margin-top: 16px;
+  text-align: center;
+}
+
+.search-form {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.search-form input {
+  flex: 1;
+}
+
+.search-form button {
+  white-space: nowrap;
+}

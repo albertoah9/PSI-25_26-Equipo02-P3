@@ -1,8 +1,10 @@
 <template>
   <main>
-    <h1>Log Out</h1>
-    <p>You have logged out succesfully</p>
-    <p>Redirecting to Home in 5 seconds...</p>
+    <div class="login-card">
+      <h2>Log Out</h2>
+
+      <p>You will be redirected to home in 5 seconds.</p>
+    </div>
   </main>
 </template>
 

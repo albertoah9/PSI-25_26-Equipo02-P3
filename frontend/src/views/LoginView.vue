@@ -1,26 +1,34 @@
 <template>
   <main>
-    <h1>Login</h1>
+    <div class="login-card">
+      <h2>Login</h2>
 
-    <form @submit.prevent="handleLogin">
-      <input
-        v-model="username"
-        type="text"
-        placeholder="Username"
-      />
+      <form @submit.prevent="handleLogin">
+        <div class="field">
+          <input
+            v-model="username"
+            type="text"
+            placeholder="Username"
+          />
+        </div>
 
-      <input
-        v-model="password"
-        type="password"
-        placeholder="Password"
-      />
+        <div class="field">
+          <input
+            v-model="password"
+            type="password"
+            placeholder="Password"
+          />
+        </div>
 
-      <button type="submit">
-        Login
-      </button>
-    </form>
+        <button type="submit">
+          Login
+        </button>
+      </form>
 
-    <p v-if="error">{{ error }}</p>
+      <p v-if="error" class="error">
+        {{ error }}
+      </p>
+    </div>
   </main>
 </template>
 
