@@ -80,7 +80,7 @@ input[type="text"], input[type="password"], input[type="search"] {
   background: #fff;
   text-align: center;
 }
-.song-card img { width: 100%; height: 140px; object-fit: cover; display: block; }
+.song-card img { width: 100%; height: 250px; object-fit: cover; display: block; }
 .song-card .song-card-body { padding: 8px; }
 .song-card .song-title { font-weight: 600; font-size: 0.95rem; }
 .song-card .song-artist { color: #666; font-size: 0.85rem; }
@@ -100,8 +100,13 @@ input[type="text"], input[type="password"], input[type="search"] {
 .login-card .error { color: #c0392b; font-size: 0.85rem; }
 
 /* PlayView */
-.play-view { max-width: 800px; margin: 0 auto; }
+.play-view {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
 .play-view .song-bg {
+  min-height: 720px;
   background-size: cover;
   background-position: center;
   border-radius: 6px;
@@ -109,18 +114,35 @@ input[type="text"], input[type="password"], input[type="search"] {
   color: white;
   text-shadow: 0 1px 3px rgba(0,0,0,0.6);
   position: relative;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 18px;
 }
+
 .play-view .song-bg::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.35);
+  background: rgba(0,0,0,0.25);
   border-radius: 6px;
 }
-.play-view .song-bg > * { position: relative; z-index: 1; }
+
+.play-view .song-bg > * {
+  position: relative;
+  z-index: 1;
+}
 .play-view .song-bg h2 { margin-top: 0; }
 
-.lyrics-display { margin-top: 16px; min-height: 160px; text-align: center; }
+.lyrics-display {
+  width: 75%;
+  padding: 14px 20px;
+  background: rgba(0,0,0,0.55);
+  border-radius: 4px;
+  text-align: center;
+}
 .lyrics-line { padding: 6px 0; color: #ddd; font-size: 1rem; }
 .lyrics-line.current { color: #fff; font-size: 1.15rem; font-weight: 600; }
 .lyrics-line input {

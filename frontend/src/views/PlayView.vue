@@ -1,12 +1,10 @@
 <template>
   <main v-if="song" class="play-view">
-    
     <section
       class="song-bg"
-      :style="{ backgroundImage: `url(http://127.0.0.1:8000${song.background_image})` }"
+      :style="{ backgroundImage: `url(${song.background_image})` }"
     >
-      <h2>{{ song.title }}</h2>
-      <p>{{ song.artist }}</p>
+      <h2>{{ song.title }} - {{ song.artist }}</h2>
 
       <AudioPlayer
         :song="song"
@@ -14,9 +12,7 @@
         @onTimeUpdate="handleTimeUpdate"
         @onEnded="handleEnded"
       />
-    </section>
 
-    <div class="lyrics-display">
       <LyricsDisplay
         :song="song"
         :current-time="currentTime"
@@ -24,14 +20,13 @@
         @startAudio="handleStartAudio"
         @summary="handleSummary"
       />
-    </div>
+    </section>
 
     <div v-if="summary" class="summary-card">
       <h3>Results</h3>
       <p>Correct answers: {{ summary.correct }}</p>
       <p>Wrong answers: {{ summary.wrong }}</p>
     </div>
-
   </main>
 
   <p v-else>Loading song...</p>
