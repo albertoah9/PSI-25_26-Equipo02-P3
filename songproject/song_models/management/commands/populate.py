@@ -18,7 +18,7 @@ class Command(BaseCommand):
 
         # --- Songs ---
         s1 = Song.objects.create(id=3, title='Super Trouper', artist='ABBA', language='EN', audio_file='ABBA - Super Trouper.mp3', lrc_file='ABBA - Super Trouper.lrc', background_image='ABBA - Super Trouper.jpg', category='POP')
-        s2= Song.objects.create(title='Here in the real world', artist='Alan Jackson', language='EN', audio_file='Alan Jackson - Here In The Real World.mp3', lrc_file='Alan Jackson - Here In The Real World.lrc', background_image='Alan Jackson - Here In The Real World.png', category='COUNTRY')
+        s2= Song.objects.create(title='Here in the real world', artist='Alan Jackson', language='EN', audio_file='Alan Jackson - Here In The Real World.mp3', lrc_file='Alan Jackson - Here In The Real World.lrc', background_image='Alan Jackson - Here In The Real World.jpg', category='COUNTRY')
         s3 = Song.objects.create(title='Don\'t Forget to Remember', artist='Beegees', language='EN', audio_file='Beegees - Don\'t Forget to Remember.mp3', lrc_file='Beegees - Don\'t Forget to Remember.lrc', background_image='Beegees - Don\'t Forget to Remember.png', category='POP')
 
         # --- Users ---
