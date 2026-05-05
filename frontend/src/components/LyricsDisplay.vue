@@ -14,9 +14,9 @@
       <p>
         {{ renderLine(line) }}
       </p>
-
+      
       <div
-        v-if="line.index === currentIndex && line.missingWord && !solved[line.index]"
+        v-if="line.index === pendingLineIndex"
       >
         <input
           v-model="currentInput"
@@ -133,18 +133,44 @@ const visibleLines = computed(() => {
     ))
 })
 
+const pendingLineIndex = computed(() => {
+  const previousIndex = currentIndex.value - 1
+
+  if (previousIndex < 0) return -1
+
+  const previousLine = lines.value[previousIndex]
+
+  if (
+    previousLine?.missingWord &&
+    !solved.value[previousIndex]
+  ) {
+    return previousIndex
+  }
+
+  return -1
+})
+
 watch(
   () => currentIndex.value,
-  (newIndex) => {
+  (newIndex, oldIndex) => {
     if (newIndex === -1) return
 
-    currentInput.value = ''
+    const previousIndex = oldIndex
 
-    const line = lines.value[newIndex]
+    if (previousIndex !== undefined && previousIndex !== -1) {
+      const previousLine = lines.value[previousIndex]
 
-    if (line?.missingWord && !solved.value[newIndex]) {
-      emit('stopAudio')
+      if (
+        previousLine?.missingWord &&
+        !solved.value[previousIndex]
+      ) {
+        currentInput.value = ''
+        emit('stopAudio')
+        return
+      }
     }
+
+    currentInput.value = ''
 
     if (newIndex === lines.value.length - 1 && !summarySent.value) {
       sendSummary()
