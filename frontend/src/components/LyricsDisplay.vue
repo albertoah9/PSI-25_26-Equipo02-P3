@@ -65,24 +65,34 @@ onMounted(async () => {
 })
 
 async function loadLyrics() {
+  console.log('LRC URL:', props.song.lrc_file)
+
   const response = await fetch(props.song.lrc_file)
+
+  console.log('LRC response status:', response.status)
+
   const text = await response.text()
 
+  console.log('LRC text:', text)
+
   lines.value = parseLrc(text)
+
+  console.log('Parsed lines:', lines.value)
 }
 
 function parseLrc(text) {
   return text
-    .split('\n')
+    .split(/\r?\n/)
     .map((rawLine) => {
-      const match = rawLine.match(/^\[(\d{2}):(\d{2}\.\d{2})\](.*)$/)
+      const match = rawLine.match(/^\[(\d{1,2}):(\d{2})(?:[:.](\d{1,2}))?\](.*)$/)
 
       if (!match) return null
 
       const minutes = Number(match[1])
       const seconds = Number(match[2])
-      const time = minutes * 60 + seconds
-      const lyric = match[3].trim()
+      const fraction = match[3] ? Number(`0.${match[3]}`) : 0
+      const time = minutes * 60 + seconds + fraction
+      const lyric = match[4].trim()
 
       const missingMatch = lyric.match(/\{([^}]+)\}/)
       const missingWord = missingMatch ? missingMatch[1].trim() : null
