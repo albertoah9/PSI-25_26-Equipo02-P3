@@ -6,6 +6,7 @@
       <form @submit.prevent="handleLogin">
         <div class="field">
           <input
+            data-cy="username"
             v-model="username"
             type="text"
             placeholder="Username"
@@ -14,6 +15,7 @@
 
         <div class="field">
           <input
+            data-cy="password"
             v-model="password"
             type="password"
             placeholder="Password"

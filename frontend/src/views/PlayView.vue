@@ -2,7 +2,7 @@
   <main v-if="song" class="play-view">
     <section
       class="song-bg"
-      :style="{ backgroundImage: `url(${song.background_image})` }"
+      :style="{ backgroundImage: `url('${song.background_image}')` }"
     >
       <h2>{{ song.title }} - {{ song.artist }}</h2>
 
@@ -24,8 +24,7 @@
 
     <div v-if="summary" class="summary-card">
       <h3>Results</h3>
-      <p>Correct answers: {{ summary.correct }}</p>
-      <p>Wrong answers: {{ summary.wrong }}</p>
+      <p>Correct answers: {{ summary.correct }} - Wrong answers: {{ summary.wrong }}</p>
     </div>
   </main>
 

@@ -1,7 +1,5 @@
 <template>
-  <section>
-    <h2>Lyrics</h2>
-
+  <section class="lyrics-display">
     <div v-if="!lines.length">
       Loading lyrics...
     </div>
@@ -9,30 +7,34 @@
     <div
       v-for="line in visibleLines"
       :key="line.index"
-      :class="{ current: line.index === currentIndex }"
+      :class="['lyrics-line', { current: line.index === activeIndex }]"
     >
-      <p>
-        {{ renderLine(line) }}
-      </p>
-      
-      <div
-        v-if="line.index === pendingLineIndex"
-      >
+      <template v-if="line.index === activeIndex && line.missingWord && !solved[line.index]">
+        {{ line.text.split('{')[0] }}
+
         <input
+          data-cy="blankInput"
           v-model="currentInput"
           type="text"
-          placeholder="Missing word"
-          @input="checkAnswer(line.index)"
+          @keyup.enter="checkAnswer(line.index)"
         />
 
-        <button type="button" @click="skip(line.index)">
+        {{ line.text.split('}')[1] }}
+
+        <button
+          data-cy="skip"
+          type="button"
+          class="skip-btn"
+          @click="skip(line.index)"
+        >
           Skip
         </button>
-      </div>
-    </div>
+      </template>
 
-    <p>Correct: {{ correctGuesses }}</p>
-    <p>Wrong: {{ wrongGuesses }}</p>
+      <template v-else>
+        {{ renderLine(line) }}
+      </template>
+    </div>
   </section>
 </template>
 
@@ -80,6 +82,18 @@ async function loadLyrics() {
   console.log('Parsed lines:', lines.value)
 }
 
+function checkIfFinished() {
+  const missingLines = lines.value
+    .map((line, index) => ({ line, index }))
+    .filter(({ line }) => line.missingWord)
+
+  const allSolved = missingLines.every(({ index }) => solved.value[index])
+
+  if (allSolved && !summarySent.value) {
+    sendSummary()
+  }
+}
+
 function parseLrc(text) {
   return text
     .split(/\r?\n/)
@@ -122,14 +136,14 @@ const currentIndex = computed(() => {
 })
 
 const visibleLines = computed(() => {
-  if (currentIndex.value === -1) return []
+  if (activeIndex.value === -1) return []
 
   return lines.value
     .map((line, index) => ({ ...line, index }))
     .filter((line) => (
-      line.index === currentIndex.value - 1 ||
-      line.index === currentIndex.value ||
-      line.index === currentIndex.value + 1
+      line.index === activeIndex.value - 1 ||
+      line.index === activeIndex.value ||
+      line.index === activeIndex.value + 1
     ))
 })
 
@@ -148,6 +162,12 @@ const pendingLineIndex = computed(() => {
   }
 
   return -1
+})
+
+const activeIndex = computed(() => {
+  return pendingLineIndex.value !== -1
+    ? pendingLineIndex.value
+    : currentIndex.value
 })
 
 watch(
@@ -194,7 +214,8 @@ function checkAnswer(lineIndex) {
     correctGuesses.value += 1
     currentInput.value = ''
     emit('startAudio')
-  } else if (currentInput.value.length >= line.missingWord.length) {
+    checkIfFinished()
+  } else {
     wrongGuesses.value += 1
     emit('stopAudio')
   }
@@ -210,6 +231,7 @@ function skip(lineIndex) {
   wrongGuesses.value += 1
   currentInput.value = ''
   emit('startAudio')
+  checkIfFinished()
 }
 
 function sendSummary() {
@@ -232,6 +254,19 @@ function renderLine(line) {
 
   return line.displayText
 }
+
+watch(
+  () => props.currentTime,
+  () => {
+    if (!lines.value.length) return
+
+    const lastIndex = lines.value.length - 1
+
+    if (currentIndex.value >= lastIndex && !summarySent.value) {
+      sendSummary()
+    }
+  }
+)
 </script>
 
 <style scoped>

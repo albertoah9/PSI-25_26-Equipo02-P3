@@ -4,9 +4,23 @@
       <RouterLink class="brand" to="/">🎶 Songs</RouterLink>
 
       <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink v-if="!auth.isAuthenticated" to="/log-in">Log-In</RouterLink>
-        <RouterLink v-else to="/log-out">Log-Out</RouterLink>
+        <RouterLink data-cy="home-cypress-test" to="/">Home</RouterLink>
+
+        <RouterLink
+          v-if="!auth.isAuthenticated"
+          data-cy="login-cypress-test"
+          to="/log-in"
+        >
+          Log-In
+        </RouterLink>
+
+        <RouterLink
+          v-else
+          to="/log-out"
+        >
+          Log-Out
+        </RouterLink>
+
         <RouterLink to="/faq">FAQ</RouterLink>
       </nav>
     </header>
@@ -14,7 +28,6 @@
     <main>
       <RouterView />
     </main>
-
   </div>
 </template>
 

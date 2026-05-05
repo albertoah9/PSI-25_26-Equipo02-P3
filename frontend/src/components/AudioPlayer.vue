@@ -1,5 +1,6 @@
 <template>
   <audio
+    id="my-audio"
     ref="audio"
     controls
     :src="song.audio_file"

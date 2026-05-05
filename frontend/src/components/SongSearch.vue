@@ -25,12 +25,17 @@ async function handleSearch() {
   <section>
     <form class="search-form" @submit.prevent="handleSearch">
       <input
+        data-cy="search_text"
         v-model="title"
         type="text"
         placeholder="Search songs by title"
       />
 
-      <button type="submit" class="btn-secondary">
+      <button
+        data-cy="search_button"
+        type="submit"
+        class="btn-secondary"
+      >
         Search
       </button>
     </form>

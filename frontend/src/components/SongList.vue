@@ -5,6 +5,7 @@
       :key="song.id"
       class="song-card"
       :to="`/songs/${song.id}`"
+      :data-cy="song.title"
     >
       <img
         :src="song.background_image"
