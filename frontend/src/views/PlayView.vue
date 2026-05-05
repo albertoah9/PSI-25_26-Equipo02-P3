@@ -1,28 +1,37 @@
 <template>
-  <main v-if="song">
-    <h1>{{ song.title }}</h1>
-    <h2>{{ song.artist }}</h2>
+  <main v-if="song" class="play-view">
+    
+    <section
+      class="song-bg"
+      :style="{ backgroundImage: `url(http://127.0.0.1:8000${song.background_image})` }"
+    >
+      <h2>{{ song.title }}</h2>
+      <p>{{ song.artist }}</p>
 
-    <AudioPlayer
-      :song="song"
-      :stop-audio="stopAudio"
-      @onTimeUpdate="handleTimeUpdate"
-      @onEnded="handleEnded"
-    />
+      <AudioPlayer
+        :song="song"
+        :stop-audio="stopAudio"
+        @onTimeUpdate="handleTimeUpdate"
+        @onEnded="handleEnded"
+      />
+    </section>
 
-    <LyricsDisplay
-      :song="song"
-      :current-time="currentTime"
-      @stopAudio="handleStopAudio"
-      @startAudio="handleStartAudio"
-      @summary="handleSummary"
-    />
+    <div class="lyrics-display">
+      <LyricsDisplay
+        :song="song"
+        :current-time="currentTime"
+        @stopAudio="handleStopAudio"
+        @startAudio="handleStartAudio"
+        @summary="handleSummary"
+      />
+    </div>
 
-    <section v-if="summary">
-      <h2>Results</h2>
+    <div v-if="summary" class="summary-card">
+      <h3>Results</h3>
       <p>Correct answers: {{ summary.correct }}</p>
       <p>Wrong answers: {{ summary.wrong }}</p>
-    </section>
+    </div>
+
   </main>
 
   <p v-else>Loading song...</p>
