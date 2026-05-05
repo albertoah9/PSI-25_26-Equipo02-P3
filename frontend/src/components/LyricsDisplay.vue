@@ -5,16 +5,16 @@
     <div v-if="!lines.length">
       Loading lyrics...
     </div>
-    <!--Recorre las 3 lineas visibles y pone en current la actual-->
+
     <div
       v-for="line in visibleLines"
       :key="line.index"
       :class="{ current: line.index === currentIndex }"
-    > 
+    >
       <p>
         {{ renderLine(line) }}
       </p>
-      <!-- SOLO muestra input (hueco para escribir) si es la linea actual, tiene hueco y no esta resuelta -->
+
       <div
         v-if="line.index === currentIndex && line.missingWord && !solved[line.index]"
       >
@@ -22,14 +22,10 @@
           v-model="currentInput"
           type="text"
           placeholder="Missing word"
-          @keyup.enter="checkAnswer(line.index)"
+          @input="checkAnswer(line.index)"
         />
-        <!-- Boton para corregir -->
-        <button @click="checkAnswer(line.index)">
-          Check
-        </button>
-        <!-- Boton para skip -->
-        <button @click="skip(line.index)">
+
+        <button type="button" @click="skip(line.index)">
           Skip
         </button>
       </div>
@@ -42,7 +38,7 @@
 
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
-// LyricsDisplay recibe la canción y el segundo actual del audio (song y currentTime)
+
 const props = defineProps({
   song: {
     type: Object,
@@ -53,7 +49,7 @@ const props = defineProps({
     required: true,
   },
 })
-// Puede emitir tres eventos, parar el audio, reanudarlo y mandar el summaty que tiene las correct y wrong answers
+
 const emit = defineEmits(['stopAudio', 'startAudio', 'summary'])
 
 const lines = ref([])
@@ -63,12 +59,11 @@ const currentInput = ref('')
 const correctGuesses = ref(0)
 const wrongGuesses = ref(0)
 const summarySent = ref(false)
-// carga la letra con loadLyrics
+
 onMounted(async () => {
   await loadLyrics()
 })
 
-// Esto lo que hace es fetch del archivo .lrc, lee el texto, y lo parsea a líneas utíles con parseLRC
 async function loadLyrics() {
   const response = await fetch(props.song.lrc_file)
   const text = await response.text()
@@ -76,7 +71,6 @@ async function loadLyrics() {
   lines.value = parseLrc(text)
 }
 
-// coge lineas con ese formato [00:22.48]You're so {hot}, teasing me y extrae los minutos, los segundos y el texto
 function parseLrc(text) {
   return text
     .split('\n')
@@ -87,12 +81,12 @@ function parseLrc(text) {
 
       const minutes = Number(match[1])
       const seconds = Number(match[2])
-      const time = minutes * 60 + seconds // convierte todo el tiempo a segundos
+      const time = minutes * 60 + seconds
       const lyric = match[3].trim()
 
-      const missingMatch = lyric.match(/\{([^}]+)\}/) // detecta la palabra oculta (la que hay que adivinar)
-      const missingWord = missingMatch ? missingMatch[1].trim() : null // guarda la palabra en missing word
-      // aqui crea el displayText para mostrar esto You're so _____, teasing me
+      const missingMatch = lyric.match(/\{([^}]+)\}/)
+      const missingWord = missingMatch ? missingMatch[1].trim() : null
+
       return {
         time,
         text: lyric,
@@ -103,15 +97,12 @@ function parseLrc(text) {
     .filter(Boolean)
 }
 
-// Esto sirve para saber la linea actual
-// lo que hace es comparar el tiempo actual del audio con el tiempo de la letra de manera que si
-// la cancion va por el 22.50 y hay una linea en el 22.48 esa sera la actual
 const currentIndex = computed(() => {
   if (!lines.value.length) return -1
 
   let index = 0
 
-  for (let i = 0; i < lines.value.length; i++) {
+  for (let i = 0; i < lines.value.length; i += 1) {
     if (props.currentTime >= lines.value[i].time) {
       index = i
     }
@@ -120,20 +111,18 @@ const currentIndex = computed(() => {
   return index
 })
 
-// esto muestra solo 3 líneas, la anterior, actual y siguiente
 const visibleLines = computed(() => {
   if (currentIndex.value === -1) return []
 
   return lines.value
     .map((line, index) => ({ ...line, index }))
-    .filter((line) => {
-      return (
-        line.index === currentIndex.value - 1 || line.index === currentIndex.value || line.index === currentIndex.value + 1)
-    })
+    .filter((line) => (
+      line.index === currentIndex.value - 1 ||
+      line.index === currentIndex.value ||
+      line.index === currentIndex.value + 1
+    ))
 })
 
-// vigila el cambio de linea, cuando se cambia de linea limpia el input, mira si la linea tiene palabra oculta
-// si tiene hueco sin resolver emite el evento de parar canción, y si esta en la ultima linea emite evento de enseñar summary
 watch(
   () => currentIndex.value,
   (newIndex) => {
@@ -153,18 +142,15 @@ watch(
   }
 )
 
-// para evitar problemas con espacios o mayusculas
 function normalize(value) {
   return value.trim().toLowerCase()
 }
 
-// comprueba si la respuesta es correcta y en ese caso guarda la linea como resuelta, guarda la respuesta, suma acierto
-// limpia el input y emite evento para reanudar
-// si falla summa un intento fallido y mantiene la cancion parada
 function checkAnswer(lineIndex) {
   const line = lines.value[lineIndex]
 
   if (!line?.missingWord) return
+  if (!currentInput.value.trim()) return
 
   if (normalize(currentInput.value) === normalize(line.missingWord)) {
     solved.value[lineIndex] = true
@@ -172,13 +158,12 @@ function checkAnswer(lineIndex) {
     correctGuesses.value += 1
     currentInput.value = ''
     emit('startAudio')
-  } else {
+  } else if (currentInput.value.length >= line.missingWord.length) {
     wrongGuesses.value += 1
     emit('stopAudio')
   }
 }
 
-// si se skipea se muestra el resultado, se guarda el resultado, se suma un intento fallido, se limpia input y se reanuda el audio
 function skip(lineIndex) {
   const line = lines.value[lineIndex]
 
@@ -191,7 +176,6 @@ function skip(lineIndex) {
   emit('startAudio')
 }
 
-// Manda el resumen
 function sendSummary() {
   summarySent.value = true
 
@@ -201,8 +185,6 @@ function sendSummary() {
   })
 }
 
-// pinta las lineas, si no tiene hueco pone el texto tal cual, si tiene hueco y esta resuelto lo muestra con el resultado
-// y si esta sin resolver lo pone en el formato de antes 
 function renderLine(line) {
   if (!line.missingWord) {
     return line.text
