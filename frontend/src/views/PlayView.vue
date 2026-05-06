@@ -68,6 +68,8 @@ function handleStartAudio() {
 }
 
 async function handleSummary(data) {
+  console.log('SUMMARY RECEIVED:', data)
+
   summary.value = data
 
   if (auth.isAuthenticated) {

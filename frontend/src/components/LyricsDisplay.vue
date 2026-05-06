@@ -192,9 +192,6 @@ watch(
 
     currentInput.value = ''
 
-    if (newIndex === lines.value.length - 1 && !summarySent.value) {
-      sendSummary()
-    }
   }
 )
 
@@ -237,10 +234,14 @@ function skip(lineIndex) {
 function sendSummary() {
   summarySent.value = true
 
-  emit('summary', {
+  const data = {
     correct: correctGuesses.value,
     wrong: wrongGuesses.value,
-  })
+  }
+
+  console.log('SUMMARY SENT:', data)
+
+  emit('summary', data)
 }
 
 function renderLine(line) {
@@ -255,18 +256,6 @@ function renderLine(line) {
   return line.displayText
 }
 
-watch(
-  () => props.currentTime,
-  () => {
-    if (!lines.value.length) return
-
-    const lastIndex = lines.value.length - 1
-
-    if (currentIndex.value >= lastIndex && !summarySent.value) {
-      sendSummary()
-    }
-  }
-)
 </script>
 
 <style scoped>
