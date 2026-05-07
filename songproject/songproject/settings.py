@@ -145,6 +145,7 @@ REST_FRAMEWORK = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    'https://practica4-songproject-pareja02-grupoXX-2026-frontend-v1.onrender.com',
 ]
 
 MEDIA_URL = '/media/'
