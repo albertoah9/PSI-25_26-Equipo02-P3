@@ -2,7 +2,7 @@
   <main v-if="song" class="play-view">
     <section
       class="song-bg"
-      :style="{ backgroundImage: `url('${song.background_image}')` }"
+      :style="{ backgroundImage: `url(&quot;${mediaUrl(song.background_image)}&quot;)` }"
     >
       <h2>{{ song.title }} - {{ song.artist }}</h2>
 
@@ -49,6 +49,7 @@ const summary = ref(null)
 
 onMounted(async () => {
   song.value = await getSong(route.params.id)
+  console.log(song.value.background_image)
 })
 
 function handleTimeUpdate(time) {
@@ -79,5 +80,9 @@ async function handleSummary(data) {
       wrong_guesses: data.wrong,
     })
   }
+}
+
+function mediaUrl(path) {
+  return path
 }
 </script>
