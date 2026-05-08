@@ -4,8 +4,7 @@ from rest_framework import status
 
 # replace by your URL in render.com
 # BASE_URL = "https://song-54se.onrender.com/api/v1/"
-BASE_URL = "https://p3-songproject-equipo02-2313-25-26-v1.onrender.com/api/v1/"  # Adjust if your endpoint is different
-
+BASE_URL = "https://practica4-songproject-pareja02-grupo2313.onrender.com/api/v1/"
 
 
 class TestDjoserLogin(unittest.TestCase):
